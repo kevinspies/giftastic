@@ -1,62 +1,65 @@
 var videogames = [];
 var videogame;
+var key = "KjWAKsFTOTtN5AD3PQQa4UA5Xj8nhPYH";//my key! mine!
 
 function renderButtons() {
-
     // Deleting the movies prior to adding new movies
     // (this is necessary otherwise we will have repeat buttons)
     $("#buttontab").empty();
-
     // Looping through the array of movies
     for (var i = 0; i < videogames.length; i++) {
-        // Then dynamicaly generating buttons for each movie in the array
-        // This code $("<button>") is all jQuery needs to create the beginning and end tag. (<button></button>)
-        var newbutton = $("<button>");
-        // Adding a class
+        var newbutton = $("<button>");//let's store newbutton somewhere so we can access later
         newbutton.addClass("videogame");
-        // Added a data-attribute
         newbutton.attr("data-name", videogames[i]);
-        // Provided the initial button text
         newbutton.text(videogames[i]);
-        // Added the button to the HTML
-        $("#buttontab").append(newbutton);
+        $("#buttontab").append(newbutton);//are these buttons getting lost?
     }
 }
 
-// Event listener button generator, not using API yet here!
-$("#submit").on("click", function () {//problem with where my on clicks are happening?
+// Event listener button generator
+$("#submit").on("click", function (event) {
     event.preventDefault();
-    // In this case, the "this" keyword refers to the button that was clicked
     videogame = $("#search").val().trim();
     videogames.push(videogame);
-    console.log(videogame);
+    console.log("blah blah " + videogame);//works
     renderButtons();
-
 });
 
-// Constructing a URL to search Giphy for the name of the person who said the quote
-var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
-    videogame + "&api_key=BkaUZZWcFij6J7AoQj3WtPb1R2p9O6V9&limit=10";
 
-// Performing our AJAX GET request
-$.ajax({
-    url: queryURL,
-    method: "GET"
+$(document).ready(function () {
+    //--------------top tab button on click takes everything below-------------------------------------
+    // $("button").on("click", function () {
+    $("body").on("click", ".videogame", function (event) {
+        event.preventDefault();
+        console.log("hi");
+        // var thisgame = $(this).attr("data-name");//not working?
+        var thisgame = $(this).attr("data-name");
+        // console.log("why undefined!!! " + $(this).attr("data-name"));//undefined
+        console.log("using .attr(data-name) if this works i'm gucci: " + thisgame);
+        // Constructing a URL to search Giphy for the name of the person who said the quote
+        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+            thisgame + "&api_key=" + key + "&limit=5";
+
+        // Performing our AJAX GET request
+        $.ajax({
+            url: queryURL,
+            method: "GET"
+        })
+            // After the data comes back from the API
+            .then(function (response) {
+                // Storing an array of results in the results variable
+                // var results = response.data; 
+                console.log(response);
+                var result = response.data;
+                console.log(result[0].url);
+
+                var imageURL = result[0].url;
+                var gameImage = $("<img>");
+                gameImage.attr("src", imageURL);
+                gameImage.attr("alt", "wataaaaap");
+                $("#images").prepend(gameImage);
+
+            });
+        //--------------top tab button on click takes everything above-------------------------------------
+    })
 })
-    // After the data comes back from the API
-    .then(function (response) {
-        // Storing an array of results in the results variable
-        // var results = response.data; 
-        console.log(response);
-        var result = response.data;
-        console.log(result[0].url);
-
-        var imageURL = result[0].url;
-        var gameImage = $("<img>");
-        gameImage.attr("src", imageURL);
-        gameImage.attr("alt", "wataaaaap");
-        $("#images").prepend(gameImage);
-
-
-    });
-
