@@ -25,7 +25,6 @@ $("#submit").on("click", function (event) {
     renderButtons();
 });
 
-
 $(document).ready(function () {
     //--------------top tab button on click takes everything below-------------------------------------
     // $("button").on("click", function () {
@@ -51,12 +50,12 @@ $(document).ready(function () {
                 // var results = response.data; 
                 console.log(response);
                 var result = response.data;
-                console.log(result[0].url);
+                // console.log(result[0].image_original_url);
 
-                var imageURL = result[0].url;
+                var imageURL = result[0].bitly_gif_url;
                 var gameImage = $("<img>");
                 gameImage.attr("src", imageURL);
-                gameImage.attr("alt", "wataaaaap");
+                gameImage.attr("alt", "Wazzaap");
                 $("#images").prepend(gameImage);
 
             });
