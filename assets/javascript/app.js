@@ -21,7 +21,7 @@ $("#submit").on("click", function (event) {
     event.preventDefault();
     videogame = $("#search").val().trim();
     videogames.push(videogame);
-    console.log("blah blah " + videogame);//works
+    console.log("videogame is: " + videogame);//works
     renderButtons();
 });
 
@@ -37,7 +37,7 @@ $(document).ready(function () {
         console.log("using .attr(data-name) if this works i'm gucci: " + thisgame);
         // Constructing a URL to search Giphy for the name of the person who said the quote
         var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
-            thisgame + "&api_key=" + key + "&limit=5";
+            thisgame + "&api_key=" + key + "&limit=10";
 
         // Performing our AJAX GET request
         $.ajax({
@@ -46,17 +46,16 @@ $(document).ready(function () {
         })
             // After the data comes back from the API
             .then(function (response) {
-                // Storing an array of results in the results variable
-                // var results = response.data; 
                 console.log(response);
-                var result = response.data;
-                // console.log(result[0].image_original_url);
+                // Storing an array of results in the results variable
+                for (var i = 0; i < response.data.length; i++) {
+                    var imageURL = response.data[i].images.original.url;
+                    var gameImage = $("<img>");
+                    gameImage.attr("src", imageURL);
+                    gameImage.attr("alt", "Wazzaap");
+                    $("#images").prepend(gameImage);
+                }
 
-                var imageURL = result[0].bitly_gif_url;
-                var gameImage = $("<img>");
-                gameImage.attr("src", imageURL);
-                gameImage.attr("alt", "Wazzaap");
-                $("#images").prepend(gameImage);
 
             });
         //--------------top tab button on click takes everything above-------------------------------------
