@@ -3,7 +3,18 @@
 } */
 /* div.inline { float:left; }
 .clearBoth { clear:both; } */
-.div{
+.gif{
     float: left;
-    /* clear: both; */
+    clear: both;
+    /* display: inline-block; */
 }
+img{
+    max-width: 150px;
+    max-height: 250px;
+    /* display: inline-block; */
+}
+/* .div{
+    float: left;
+    clear: both;
+    display: inline-block;
+} */
