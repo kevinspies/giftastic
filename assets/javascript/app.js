@@ -27,6 +27,7 @@ $("#submit").on("click", function (event) {
 
 $("body").on("click", ".videogame", function (event) {//top bar of buttons
     event.preventDefault();
+    $("#images").empty();//so the scroll bar doesn't get huge!
     console.log("hi");
     // var thisgame = $(this).attr("data-name");//not working?
     var thisgame = $(this).attr("data-name");
@@ -50,9 +51,10 @@ $("body").on("click", ".videogame", function (event) {//top bar of buttons
                 var p = $("<p>").text("Rating: " + results[i].rating);
                 var vgImage = $("<img>");
                 vgImage.attr("src", results[i].images.original_still.url);
-                vgImage.attr("class", ".gif");
+                vgImage.attr("class", "gif");
+                vgImage.attr("data-state", "still");//starts still
                 vgImage.attr("data-still", results[i].images.original_still.url);
-                vgImage.attr("data-animate", results[i].images.original_.url);
+                vgImage.attr("data-animate", results[i].images.original.url);
                 vgDiv.append(p);
                 vgDiv.append(vgImage);
                 $("#images").append(vgDiv);
@@ -63,13 +65,14 @@ $("body").on("click", ".videogame", function (event) {//top bar of buttons
 
 })
 
-$(".gif").on("click", function () {
+$("img").on("click", function () {
     // The attr jQuery method allows us to get or set the value of any attribute on our HTML element
     var state = $(this).attr("data-state");
     // If the clicked image's state is still, update its src attribute to what its data-animate value is.
     // Then, set the image's data-state to animate
     // Else set src to the data-still value
     if (state === "still") {
+        console.log("so still!");
         $(this).attr("src", $(this).attr("data-animate"));
         $(this).attr("data-state", "animate");
     } else {
