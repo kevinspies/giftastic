@@ -25,39 +25,55 @@ $("#submit").on("click", function (event) {
     renderButtons();
 });
 
-$(document).ready(function () {
-    //--------------top tab button on click takes everything below-------------------------------------
-    // $("button").on("click", function () {
-    $("body").on("click", ".videogame", function (event) {
-        event.preventDefault();
-        console.log("hi");
-        // var thisgame = $(this).attr("data-name");//not working?
-        var thisgame = $(this).attr("data-name");
-        // console.log("why undefined!!! " + $(this).attr("data-name"));//undefined
-        console.log("using .attr(data-name) if this works i'm gucci: " + thisgame);
-        // Constructing a URL to search Giphy for the name of the person who said the quote
-        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
-            thisgame + "&api_key=" + key + "&limit=10";
+$("body").on("click", ".videogame", function (event) {//top bar of buttons
+    event.preventDefault();
+    console.log("hi");
+    // var thisgame = $(this).attr("data-name");//not working?
+    var thisgame = $(this).attr("data-name");
+    // console.log("why undefined!!! " + $(this).attr("data-name"));//undefined
+    console.log("using .attr(data-name) if this works i'm gucci: " + thisgame);
+    // Constructing a URL to search Giphy for the name of the person who said the quote
+    var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+        thisgame + "&api_key=" + key + "&limit=10";
 
-        // Performing our AJAX GET request
-        $.ajax({
-            url: queryURL,
-            method: "GET"
-        })
-            // After the data comes back from the API
-            .then(function (response) {
-                console.log(response);
-                // Storing an array of results in the results variable
-                for (var i = 0; i < response.data.length; i++) {
-                    var imageURL = response.data[i].images.original.url;
-                    var gameImage = $("<img>");
-                    gameImage.attr("src", imageURL);
-                    gameImage.attr("alt", "Wazzaap");
-                    $("#images").prepend(gameImage);
-                }
-
-
-            });
-        //--------------top tab button on click takes everything above-------------------------------------
+    // Performing our AJAX GET request
+    $.ajax({
+        url: queryURL,
+        method: "GET"
     })
+        // After the data comes back from the API
+        .then(function (response) {
+            console.log(response);
+            var results = response.data;
+            for (var i = 0; i < results.length; i++) {
+                var vgDiv = $("<div>");//videogame vid
+                var p = $("<p>").text("Rating: " + results[i].rating);
+                var vgImage = $("<img>");
+                vgImage.attr("src", results[i].images.original_still.url);
+                vgImage.attr("class", ".gif");
+                vgImage.attr("data-still", results[i].images.original_still.url);
+                vgImage.attr("data-animate", results[i].images.original_.url);
+                vgDiv.append(p);
+                vgDiv.append(vgImage);
+                $("#images").append(vgDiv);
+            }
+
+
+        });
+
 })
+
+$(".gif").on("click", function () {
+    // The attr jQuery method allows us to get or set the value of any attribute on our HTML element
+    var state = $(this).attr("data-state");
+    // If the clicked image's state is still, update its src attribute to what its data-animate value is.
+    // Then, set the image's data-state to animate
+    // Else set src to the data-still value
+    if (state === "still") {
+        $(this).attr("src", $(this).attr("data-animate"));
+        $(this).attr("data-state", "animate");
+    } else {
+        $(this).attr("src", $(this).attr("data-still"));
+        $(this).attr("data-state", "still");
+    }
+});
