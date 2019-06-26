@@ -1,0 +1,9 @@
+/* img{
+    display: inline;
+} */
+/* div.inline { float:left; }
+.clearBoth { clear:both; } */
+.div{
+    float: left;
+    /* clear: both; */
+}
